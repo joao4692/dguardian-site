@@ -363,6 +363,25 @@ async function enviarMensagem() {
     const msgs = document.getElementById('chat-mensagens');
     msgs.removeChild(msgs.lastChild);
 
+    // 🔥 NOVA CAMADA (SEGURA, NÃO QUEBRA NADA)
+    if (!res.ok) {
+
+      if (res.status === 429) {
+        adicionarMensagem(
+          'bot',
+          '⏳ Você atingiu o limite de mensagens. Aguarde alguns minutos e tente novamente.'
+        );
+        return;
+      }
+
+      adicionarMensagem(
+        'bot',
+        data.error || data.erro || 'Erro ao processar mensagem.'
+      );
+      return;
+    }
+
+    // fluxo normal (igual ao seu original)
     adicionarMensagem('bot', data.resposta);
     historico = data.historico;
 
